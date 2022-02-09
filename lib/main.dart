@@ -21,17 +21,17 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   List<Model> list = <Model>[];
   final url =
-      'https://api.edamam.com/search?q=chicken&app_id=6fc829d9&app_key=792c66a274bf9752768ce2d69804b7f4&from=0&to=100&calories=591-722&health=alcohol-free';
+      'https://api.edamam.com/search?q=chicken&app_id=4719113b&app_key=098f9b18cf3e480f5fd6ff3290df7fc7';
 
   getApiData() async {
     var response = await http.get(Uri.parse(url));
     Map json = jsonDecode(response.body);
     json['hits'].forEach((e){
       Model model = Model(
-        url: e['recipe']['uri'],
-        image: e['recipe']['image'],
-        source: e['recipe']['source'],
-        label: e['recipe']
+          url: e['recipe']['uri'],
+          image: e['recipe']['image'],
+          source: e['recipe']['source'],
+          label: e['recipe']['label']
       );
       setState(() {
         list.add(model);
@@ -68,23 +68,37 @@ class _MyAppState extends State<MyApp> {
                 height: 15,
               ),
               GridView.builder(
-                physics: const ScrollPhysics(),
+                  physics: const ScrollPhysics(),
                   shrinkWrap: true,
-                  // primary: true,
+                  primary: true,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,crossAxisSpacing: 5,mainAxisSpacing: 5
-              ),
+                      crossAxisCount: 2,crossAxisSpacing: 5,mainAxisSpacing: 5
+                  ),
                   itemCount: list.length,
                   itemBuilder: (context,i){
-                final x = list[i];
-                return Column(
-                  children: [
-                    Card(
-                      child: Image.network(x.image.toString()),
-                    )
-                  ],
-                );
-              })
+                    final x = list[i];
+                    return Container(
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: NetworkImage(x.image.toString()),
+                          )
+                      ),
+
+                      child: Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            height:40,
+                            color: Colors.grey.withOpacity(0.3),
+                            child: Text(x.label.toString(),style: TextStyle(fontSize: 20,color: Colors.lightBlue),),
+                          )
+                        ],
+                      ),
+                    );
+
+
+                  })
             ],
           ),
         ),

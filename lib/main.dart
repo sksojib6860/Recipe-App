@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:nasim_sir_project/model.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 main() {
   runApp(MaterialApp(
@@ -72,28 +73,44 @@ class _MyAppState extends State<MyApp> {
                   shrinkWrap: true,
                   primary: true,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,crossAxisSpacing: 5,mainAxisSpacing: 5
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 15,
+                      mainAxisSpacing: 15
                   ),
                   itemCount: list.length,
                   itemBuilder: (context,i){
                     final x = list[i];
-                    return Container(
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: NetworkImage(x.image.toString()),
-                          )
-                      ),
+                    return InkWell(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>WebPage(
+                          url: x.url,
+                        )));
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: NetworkImage(x.image.toString()),
+                            )
+                        ),
 
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            height:40,
-                            color: Colors.grey.withOpacity(0.3),
-                            child: Text(x.label.toString(),style: TextStyle(fontSize: 20,color: Colors.lightBlue),),
-                          )
-                        ],
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(10),
+                              height:40,
+                              color: Colors.black.withOpacity(0.5),
+                              child: Center(child: Text(x.label.toString())),
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(10),
+                              height:40,
+                              color: Colors.black.withOpacity(0.5),
+                              child: Center(child: Text("Source : " + x.source.toString())),
+                            ),
+                          ],
+                        ),
                       ),
                     );
 
@@ -101,6 +118,24 @@ class _MyAppState extends State<MyApp> {
                   })
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+
+class WebPage extends StatelessWidget {
+
+  final url;
+  WebPage({this.url});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: WebView(
+          initialUrl: url,
         ),
       ),
     );

@@ -25,7 +25,7 @@ class _splashscreenState extends State<splashscreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: FlutterLogo(size: 2,),
+      child: Image(image: NetworkImage('https://cdn.pixabay.com/photo/2016/02/09/16/08/cocktail-1189879_960_720.jpg'),fit: BoxFit.cover,),
     );
   }
 }

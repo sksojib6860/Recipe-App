@@ -2,17 +2,16 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:nasim_sir_project/model.dart';
+import 'package:nasim_sir_project/splashsceen.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: const MyApp(),
+    home: const splashscreen(),
     theme: ThemeData.dark(),
   ));
 }
-
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 

@@ -1,4 +1,4 @@
-package com.example.nasim_sir_project
+package com.sksojib.nasim_sir_project
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,34 +1,26 @@
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:nasim_sir_project/model.dart';
-import 'package:nasim_sir_project/search_page.dart';
-import 'package:nasim_sir_project/splashsceen.dart';
 import 'package:nasim_sir_project/web_view.dart';
+import 'model.dart';
 
-main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: const splashscreen(),
-    theme: ThemeData.dark(),
-  ));
-}
-
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
-
+class SearchPage extends StatefulWidget {
+  String? search;
+  SearchPage({this.search});
   @override
-  _MyAppState createState() => _MyAppState();
+  _SearchPageState createState() => _SearchPageState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _SearchPageState extends State<SearchPage> {
   List<Model> list = <Model>[];
   String? text;
-  final url =
-      'https://api.edamam.com/search?q=chicken&app_id=4719113b&app_key=098f9b18cf3e480f5fd6ff3290df7fc7';
 
-  getApiData() async {
+  getApiData(search) async {
+    final url =
+        'https://api.edamam.com/search?q=$search&app_id=4719113b&app_key=098f9b18cf3e480f5fd6ff3290df7fc7';
+
     var response = await http.get(Uri.parse(url));
     Map json = jsonDecode(response.body);
     json['hits'].forEach((e) {
@@ -45,8 +37,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    getApiData();
+    getApiData(widget.search);
   }
 
   @override
@@ -62,31 +55,6 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              TextField(
-                onChanged: (v) {
-                  text = v;
-                },
-                decoration: InputDecoration(
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SearchPage(
-                                      search: text,
-                                    )));
-                      },
-                      icon: Icon(Icons.search),
-                    ),
-                    hintText: 'Search for Recipe',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    fillColor: Colors.green.withOpacity(0.04),
-                    filled: true),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
               GridView.builder(
                   physics: const ScrollPhysics(),
                   shrinkWrap: true,
@@ -104,15 +72,15 @@ class _MyAppState extends State<MyApp> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => WebPage(
-                                      url: x.url,
-                                    )));
+                                  url: x.url,
+                                )));
                       },
                       child: Container(
                         decoration: BoxDecoration(
                             image: DecorationImage(
-                          fit: BoxFit.fill,
-                          image: NetworkImage(x.image.toString()),
-                        )),
+                              fit: BoxFit.fill,
+                              image: NetworkImage(x.image.toString()),
+                            )),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -128,7 +96,7 @@ class _MyAppState extends State<MyApp> {
                               color: Colors.black.withOpacity(0.5),
                               child: Center(
                                   child:
-                                      Text("Source : " + x.source.toString())),
+                                  Text("Source : " + x.source.toString())),
                             ),
                           ],
                         ),
